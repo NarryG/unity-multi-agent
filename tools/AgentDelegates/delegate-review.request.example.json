@@ -1,0 +1,5 @@
+{
+  "profile": "opencode-go-review",
+  "prompt": "Review the current branch diff and the claimed story handoff. Return findings ordered by severity with file references. Do not edit.",
+  "json": true
+}

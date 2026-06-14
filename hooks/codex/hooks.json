@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File .agents/hooks/AgentLockContext.ps1",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -File .agents/hooks/AgentLockContext.ps1",
+            "timeout": 15,
+            "statusMessage": "Checking agent locks"
+          }
+        ]
+      }
+    ]
+  }
+}

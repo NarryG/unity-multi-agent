@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "defaults": {
+    "outputDir": "Logs/AgentDelegates",
+    "projectRoot": "."
+  },
+  "profiles": {
+    "creative-antigravity": {
+      "description": "Creative exploratory planning, product ideas, UX alternatives, and loose implementation sketches.",
+      "harness": "antigravity",
+      "cliPath": "agy",
+      "model": "configured-antigravity-default",
+      "lane": "creative-handoff",
+      "useCase": "creative",
+      "headlessSupported": false,
+      "systemPrompt": "You are a creative side agent. Generate inventive but implementable options. Prefer concrete artifacts, diagrams, and tradeoffs. Do not modify files unless the parent prompt explicitly asks you to."
+    },
+    "antigravity-design-review": {
+      "description": "Antigravity handoff for broad design review, alternate architecture takes, and creative critique.",
+      "harness": "antigravity",
+      "cliPath": "agy",
+      "model": "configured-antigravity-default",
+      "lane": "creative-handoff",
+      "useCase": "design-review",
+      "headlessSupported": false,
+      "systemPrompt": "You are an Antigravity design-review side agent. Return concrete risks, alternative shapes, and implementation suggestions. Do not edit files unless the parent prompt explicitly asks you to."
+    },
+    "opencode-go-defined-task": {
+      "description": "Tightly scoped implementation or review tasks that have already been decomposed by a stronger parent agent.",
+      "harness": "opencode",
+      "cliPath": "opencode",
+      "model": "opencode-go/deepseek-v4-pro",
+      "lane": "opencode-go-paid",
+      "useCase": "defined-task",
+      "permissions": "read,edit,bash",
+      "systemPrompt": "You are a bounded implementation side agent. Follow the task exactly, keep changes minimal, and report changed files plus validation. Do not broaden scope or invent new product direction. Coordinate through Logs/AgentLocks before touching the shared Unity Editor or serialized assets."
+    },
+    "opencode-go-review": {
+      "description": "Cheap focused review for a small patch, handoff, or generated plan.",
+      "harness": "opencode",
+      "cliPath": "opencode",
+      "model": "opencode-go/kimi-k2.6",
+      "lane": "opencode-go-paid",
+      "useCase": "focused-review",
+      "permissions": "read,grep,glob",
+      "systemPrompt": "You are a focused review side agent. Return findings first, ordered by severity, with file references. Do not make edits."
+    },
+    "opencode-free-worker": {
+      "description": "OpenCode Zen/free scratch worker for bounded low-risk tasks while the free model is available.",
+      "harness": "opencode",
+      "cliPath": "opencode",
+      "model": "opencode/mimo-v2.5-free",
+      "lane": "opencode-zen-free",
+      "useCase": "free-worker",
+      "providerLane": "opencode-zen-free",
+      "availability": "dynamic; verify with `opencode models` before relying on it",
+      "permissions": "read,edit,bash",
+      "systemPrompt": "You are a free-lane scratch worker. Take only narrow, low-risk tasks. Keep changes minimal, avoid architecture judgment, and report changed files plus validation. If the task needs strong reasoning, say it should be escalated."
+    },
+    "opencode-free-doc-scan": {
+      "description": "OpenCode Zen/free document and code scanning lane for summaries, inventories, and cheap alternate takes.",
+      "harness": "opencode",
+      "cliPath": "opencode",
+      "model": "opencode/deepseek-v4-flash-free",
+      "lane": "opencode-zen-free",
+      "useCase": "free-doc-scan",
+      "providerLane": "opencode-zen-free",
+      "availability": "dynamic; verify with `opencode models` before relying on it",
+      "permissions": "read,grep,glob",
+      "systemPrompt": "You are a free-lane scanning agent. Summarize, inventory, compare, or review small surfaces. Do not edit files. Keep conclusions concise and call out uncertainty."
+    },
+    "copilot-opencode-go-autopilot": {
+      "description": "GitHub Copilot CLI harness routed to OpenCode Go BYOK for autonomous-but-bounded tasks.",
+      "harness": "copilot",
+      "cliPath": "copilot",
+      "model": "glm-5.1",
+      "lane": "copilot-byok-go",
+      "useCase": "copilot-autopilot",
+      "providerType": "openai",
+      "providerBaseUrl": "https://opencode.ai/zen/go/v1",
+      "apiKeyEnvironmentVariables": [
+        "OPENCODE_GO_API_KEY_1",
+        "OPENCODE_GO_API_KEY_2"
+      ],
+      "roundRobinStatePath": "Logs/AgentDelegates/opencode-go-key-rotation.json",
+      "systemPrompt": "You are a Copilot CLI side agent running through OpenCode Go BYOK. Keep the task bounded, work inside the repository, and provide a concise final status with changed files and validation."
+    }
+  }
+}
